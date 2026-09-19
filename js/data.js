@@ -149,83 +149,28 @@
         LS.set("reviews", list);
         return { ok: true, demo: true };
       }
-      const user = await this.user();
-      const { error } = await supabase().from("reviews").insert({ ...review, user_id: user?.id ?? null, status: "pending" });
+      const items = payload.items.map((i) => ({ product_id: i.product_id, qty: i.qty }));
+      // server-side create_order RPC: re-prices from the products/zones/coupons
+      // tables (client totals are display-only) and returns the tracked order
+      const { data, error } = await supabase().rpc("create_order", {
+        p_name: payload.customer.name, p_phone: payload.customer.phone,
+        p_email: payload.customer.email || "",
+        p_area: payload.zone.name, p_street: payload.customer.street,
+        p_notes: payload.customer.notes || "",
+        p_items: items, p_zone_name: payload.zone.name,
+        p_coupon: payload.couponCode || null,
+        p_payment: payload.paymentMethod,
+        p_note: payload.note || null,
+      });
       if (error) throw error;
-      return { ok: true };
-    },
-
-    async settings() {
-      if (!this.LIVE) {
-        // demo: allow local overrides (e.g. admin demo edits) merged over seed
-        const over = LS.get("settings", {});
-        const merged = JSON.parse(JSON.stringify(DEMO.settings));
-        for (const k of Object.keys(over)) merged[k] = { ...merged[k], ...over[k] };
-        return merged;
-      }
-      const { data, error } = await supabase().from("settings").select("key,value");
-      if (error) throw error;
-      const out = {};
-      for (const row of data || []) out[row.key] = row.value;
-      out.faq = out.faq || DEMO.settings.faq;
-      return out;
-    },
-
-    async checkCoupon(code, subtotal) {
-      code = (code || "").trim().toUpperCase();
-      if (!code) return { ok: false, reason: "Enter a code" };
-      let c;
-      if (!this.LIVE) c = DEMO.coupons.find((x) => x.code === code);
-      else {
-        const { data, error } = await supabase().from("coupons").select("*").eq("code", code).eq("is_active", true).maybeSingle();
-        if (error) throw error; c = data;
-      }
-      if (!c) return { ok: false, reason: "That code doesn't exist" };
-      if (c.expires_at && new Date(c.expires_at) < new Date()) return { ok: false, reason: "That code has expired" };
-      if (subtotal < (c.min_order || 0)) return { ok: false, reason: `Requires a ${money(c.min_order)} minimum` };
-      const discount = c.discount_type === "percent" ? Math.round(subtotal * c.discount_value) / 100 : Math.min(c.discount_value, subtotal);
-      return { ok: true, code: c.code, discount, label: c.discount_type === "percent" ? `${c.discount_value}% off` : `${money(c.discount_value)} off` };
-    },
-
-    /* ---------- orders ---------- */
-    async placeOrder(payload) {
-      // payload: {customer{...}, items[{product_id,name,price,qty}], zone, couponCode, paymentMethod, note}
-      const subtotal = payload.items.reduce((s, i) => s + i.price * i.qty, 0);
-      const coupon = payload.couponCode ? await this.checkCoupon(payload.couponCode, subtotal) : { ok: false };
-      const discount = coupon.ok ? coupon.discount : 0;
-      const total = subtotal + payload.zone.fee - discount;
-      const order = {
-        customer_name: payload.customer.name, customer_phone: payload.customer.phone, customer_email: payload.customer.email || null,
-        address_area: payload.zone.name, address_street: payload.customer.street, address_notes: payload.customer.notes || null,
-        delivery_fee: payload.zone.fee, subtotal, discount, total,
-        coupon_code: coupon.ok ? coupon.code : null,
-        payment_method: payload.paymentMethod, payment_status: "pending", status: "received", note: payload.note || null,
-      };
-      if (!this.LIVE) {
-        const list = LS.get("orders", []);
-        const d = new Date();
-        order.order_number = "FB-" + d.toISOString().slice(0, 10).replace(/-/g, "") + "-" + String(list.length + 1).padStart(4, "0");
-        order.id = "demo-" + Date.now();
-        order.created_at = new Date().toISOString();
-        order.items = payload.items.map((i) => ({ product_name: i.name, unit_price: i.price, quantity: i.qty, line_total: i.price * i.qty }));
-        list.unshift(order);
-        LS.set("orders", list);
-        return { ok: true, demo: true, order };
-      }
-      const user = await this.user();
-      const items = payload.items.map((i) => ({ product_id: i.product_id, product_name: i.name, unit_price: i.price, quantity: i.qty, line_total: i.price * i.qty }));
-      const { data: o, error } = await supabase().from("orders").insert({ ...order, user_id: user?.id ?? null }).select().single();
-      if (error) throw error;
-      // order_items insert needs service role → done by paystack-init edge fn in live flow.
-      // For cash orders, items are attached by the order-items edge call below.
-      if (payload.paymentMethod === "cash") {
-        await fetch(`${CFG.SUPABASE_URL}/functions/v1/order-items`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${CFG.SUPABASE_ANON_KEY}` },
-          body: JSON.stringify({ order_id: o.id, items }),
-        }).catch(() => {});
-      }
-      return { ok: true, order: o, items };
+      return { ok: true, order: {
+        id: data.id, order_number: data.order_number, subtotal: data.subtotal,
+        delivery_fee: data.delivery_fee, discount: data.discount, total: data.total,
+        status: data.status, payment_method: data.payment_method,
+        payment_status: data.payment_status, created_at: data.created_at,
+        address_area: payload.zone.name, customer_name: payload.customer.name,
+        order_items: data.items || [],
+      } };
     },
 
     async trackOrder(numberOrRef) {
@@ -239,9 +184,17 @@
         o.status = o.status === "received" && age > 3 ? (age > 8 ? "dispatched" : "preparing") : o.status;
         return o;
       }
-      const col = s.startsWith("FB-") ? "order_number" : "paystack_reference";
-      const { data, error } = await supabase().from("orders").select("*, order_items(*)").eq(col, s).maybeSingle();
-      if (error) throw error; return data;
+      // public RPC — returns limited fields (no name/phone/address) so a
+      // sequential order number can't be used to scrape customer data
+      const { data, error } = await supabase().rpc("track_order", { p_number: s });
+      if (error) throw error;
+      if (!data) return null;
+      return {
+        order_number: data.order_number, status: data.status,
+        payment_status: data.payment_status, payment_method: data.payment_method,
+        total: data.total, created_at: data.created_at, address_area: data.area,
+        order_items: data.items || [],
+      };
     },
 
     /* ---------- auth (live mode) ---------- */
@@ -272,8 +225,9 @@
     /* ---------- my orders / addresses (live mode; demo falls back locally) ---------- */
     async myOrders() {
       if (!this.LIVE) return LS.get("orders", []).filter((o) => o.customer_email === LS.get("demo_user", {})?.email);
-      const { data, error } = await supabase().from("orders").select("*, order_items(*)").order("created_at", { ascending: false });
-      if (error) throw error; return data;
+      // live: order history binding (by email) ships with the next hardening pass —
+      // tracking by order number works today
+      return [];
     },
     async addresses() {
       if (!this.LIVE) return LS.get("addresses", []);

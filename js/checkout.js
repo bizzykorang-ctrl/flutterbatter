@@ -127,8 +127,13 @@
               items: items.map((i) => ({ product_id: i.product_id, qty: i.qty })),
             }),
           });
-          const init = await r.json();
-          if (!init.authorization_url) throw new Error(init.error || "Could not start payment");
+          const init = await r.json().catch(function () { return {}; });
+          if (!init.authorization_url) {
+            // edge function not deployed / Paystack not configured yet:
+            // order is safely stored as PENDING — pay by cash or via a payment link
+            finish(order, null);
+            return;
+          }
           location.href = init.authorization_url; // callback returns to /track.html?ref=…
         }
       } catch (err) {

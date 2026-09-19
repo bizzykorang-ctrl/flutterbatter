@@ -5,8 +5,8 @@
    - PAYSTACK_PUBLIC_KEY: already the live public key (safe to expose).
    - OneSignal App ID: safe to expose. Only loads on https. */
 window.FB_CONFIG = {
-  SUPABASE_URL: "",            // e.g. "https://abcd1234.supabase.co"
-  SUPABASE_ANON_KEY: "",       // the anon/public key (NEVER the service key)
+  SUPABASE_URL: "https://bmcahanysxvwsquqymgc.supabase.co",            // e.g. "https://abcd1234.supabase.co"
+  SUPABASE_ANON_KEY: "sb_publishable_DgmckL4fpkgLVaT8en1zYQ_Ge25UnOW",       // the anon/public key (NEVER the service key)
 
   BRAND: "Flutter Batter",
   CURRENCY: "GH₵",

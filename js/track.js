@@ -41,7 +41,7 @@
           <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:6px">
             <h2 class="mono" style="font-size:1.3rem">${FB.esc(o.order_number || o.id)}</h2>${pay}
           </div>
-          <p class="sub" style="font-size:.9rem">For ${FB.esc(o.customer_name)} · ${FB.esc(o.address_area)} · placed ${new Date(o.created_at).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" })}</p>
+          <p class="sub" style="font-size:.9rem">For ${FB.esc(o.customer_name || "you")} · ${FB.esc(o.address_area)} · placed ${new Date(o.created_at).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" })}</p>
           <hr class="divider">
           ${o.status === "cancelled"
             ? `<div class="empty" style="padding:24px"><span class="badge badge-red">Cancelled</span><br><br>This order was cancelled. Questions? <a href="https://wa.me/${CFG.WHATSAPP}" target="_blank" rel="noopener">WhatsApp us</a>.</div>`
