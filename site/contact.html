@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact — Flutter Batter</title>
+  <meta name="description" content="Contact Flutter Batter — WhatsApp, email and opening hours.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+  <header class="site-header" id="siteHeader"></header>
+
+  <main class="wrap" style="padding-bottom:90px">
+    <section class="page-hero"><span class="eyebrow">We'd love to hear from you</span><h1>Contact</h1></section>
+
+    <div class="grid grid-2" style="gap:26px;align-items:start;max-width:980px">
+      <div class="grid" style="gap:16px">
+        <a class="card quote-card" href="https://wa.me/233201234567" target="_blank" rel="noopener" style="text-decoration:none">
+          <b class="who" style="font-size:1.05rem">💬 WhatsApp — fastest</b>
+          <p class="sub">020 123 4567 · replies during kitchen hours (Mon–Sat 6:30am–11am, then 4–7pm)</p>
+        </a>
+        <div class="card quote-card">
+          <b class="who" style="font-size:1.05rem">✉️ Email</b>
+          <p class="sub">hello@flutterbatter.com — for events, bulk orders and partnerships</p>
+        </div>
+        <div class="card quote-card">
+          <b class="who" style="font-size:1.05rem">📍 The kitchen</b>
+          <p class="sub">Osu, Accra — deliveries only, no walk-in pickups (yet!)</p>
+        </div>
+      </div>
+
+      <form class="card" id="contactForm" style="padding:26px">
+        <h3 style="margin-bottom:14px">Send us a note</h3>
+        <div class="field"><label for="ctName">Your name</label><input id="ctName" required maxlength="80"></div>
+        <div class="field"><label for="ctContact">Phone or email</label><input id="ctContact" required maxlength="100"></div>
+        <div class="field"><label for="ctMsg">Message</label><textarea id="ctMsg" required rows="5" maxlength="800"></textarea></div>
+        <button class="btn btn-primary" type="submit" style="width:100%">Send via WhatsApp</button>
+        <p class="sub" style="font-size:.8rem;margin-top:10px;text-align:center">Opens WhatsApp with your message pre-filled — nothing is stored.</p>
+      </form>
+    </div>
+  </main>
+
+  <footer class="site-footer" id="siteFooter"></footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/home.js"></script>
+  <script src="js/page.js"></script>
+  <script>
+    window.FB_page.on(() => {
+      document.getElementById("contactForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const n = document.getElementById("ctName").value.trim();
+        const c = document.getElementById("ctContact").value.trim();
+        const m = document.getElementById("ctMsg").value.trim();
+        const text = `Hi Flutter Batter! I'm ${n} (${c}). ${m}`;
+        window.open(`https://wa.me/233201234567?text=${encodeURIComponent(text)}`, "_blank", "noopener");
+      });
+    });
+  </script>
+  <script src="js/app.js"></script>
+</body>
+</html>

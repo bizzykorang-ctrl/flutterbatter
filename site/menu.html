@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Menu — Flutter Batter</title>
+  <meta name="description" content="Browse Flutter Batter breakfast and gift boxes — Pancake Box, Fusion Box, Classic Box. Delivered warm across Accra.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+  <header class="site-header" id="siteHeader"></header>
+
+  <section class="page-hero">
+    <div class="wrap">
+      <span class="eyebrow">Fresh every morning</span>
+      <h1>The menu</h1>
+      <p class="sub">Order by 10:30am for same-morning delivery across Greater Accra.</p>
+    </div>
+  </section>
+
+  <section style="padding-bottom:80px">
+    <div class="wrap">
+      <div class="card" style="padding:16px;margin-bottom:26px;display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+        <input id="menuSearch" type="search" placeholder="Search boxes…" aria-label="Search"
+               style="flex:1;min-width:200px;border:1.5px solid var(--cream-line);border-radius:999px;padding:11px 18px;background:var(--paper);">
+        <div id="catChips" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+      </div>
+      <div class="grid grid-3" id="menuGrid"></div>
+      <div class="empty" id="menuEmpty" style="display:none">Nothing matches that search — try “pancake”, “gift” or “omelette”.</div>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="siteFooter"></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/home.js"></script>
+  <script src="js/page.js"></script>
+  <script src="js/menu.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Track your order — Flutter Batter</title>
+  <meta name="description" content="Track your Flutter Batter order with your order number.">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+  <header class="site-header" id="siteHeader"></header>
+
+  <main class="wrap" style="padding:36px 0 90px">
+    <div class="page-hero" style="padding-top:0"><span class="eyebrow">Where's my box?</span><h1>Track your order</h1>
+      <p class="sub">Enter your order number (e.g. FB-20260918-0001) or Paystack reference.</p></div>
+
+    <div class="track-box">
+      <form id="trackForm" class="card" style="padding:24px;display:flex;gap:10px;flex-wrap:wrap">
+        <input id="trackInput" class="mono" required placeholder="FB-20260918-0001"
+               style="flex:1;min-width:220px;border:1.5px solid var(--cream-line);border-radius:999px;padding:12px 20px;background:var(--paper)">
+        <button class="btn btn-primary" type="submit">Track</button>
+      </form>
+      <div id="trackResult" style="margin-top:26px"></div>
+    </div>
+  </main>
+
+  <footer class="site-footer" id="siteFooter"></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/home.js"></script>
+  <script src="js/page.js"></script>
+  <script src="js/track.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

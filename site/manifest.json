@@ -1,0 +1,41 @@
+{
+  "name": "Flutter Batter — Breakfast Boxes, Gift-Wrapped",
+  "short_name": "Flutter Batter",
+  "description": "Warm breakfast boxes and gift-wrapped brunch delivered across Accra.",
+  "start_url": "./?utm_source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FBF1DE",
+  "theme_color": "#2B1B12",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Menu",
+      "url": "/menu.html"
+    },
+    {
+      "name": "Track order",
+      "url": "/track.html"
+    }
+  ]
+}

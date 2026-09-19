@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Box details — Flutter Batter</title>
+  <meta name="description" content="Warm breakfast and gift boxes delivered across Accra.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+  <header class="site-header" id="siteHeader"></header>
+
+  <main class="wrap">
+    <div class="pdp" id="pdp">
+      <div class="pdp-media"><div class="skeleton" style="aspect-ratio:4/3;width:100%"></div></div>
+      <div class="pdp-info"><div class="skeleton" style="height:200px"></div></div>
+    </div>
+
+    <!-- reviews -->
+    <section style="padding:20px 0 70px" id="reviewsSection">
+      <div class="section-head" style="max-width:720px">
+        <span class="eyebrow">Verified customers</span>
+        <h2>Reviews</h2>
+      </div>
+      <div id="reviewList" style="max-width:720px"></div>
+
+      <div class="card" style="max-width:720px;margin-top:26px;padding:24px" id="reviewFormCard">
+        <h3 style="margin-bottom:6px">Leave a review</h3>
+        <p class="sub" style="font-size:.88rem;margin-bottom:16px">Reviews are published after a quick check by our team.</p>
+        <form id="reviewForm">
+          <div class="form-grid two">
+            <div class="field"><label for="rvName">Your name</label><input id="rvName" required maxlength="60" placeholder="e.g. Ama A."></div>
+            <div class="field"><label for="rvTitle">Headline</label><input id="rvTitle" maxlength="80" placeholder="e.g. My go-to Saturday treat"></div>
+          </div>
+          <div class="field"><label>Rating</label>
+            <div class="rating-input" id="rvStars">
+              <button type="button" data-v="1">★</button><button type="button" data-v="2">★</button>
+              <button type="button" data-v="3">★</button><button type="button" data-v="4">★</button>
+              <button type="button" data-v="5">★</button>
+            </div>
+          </div>
+          <div class="field"><label for="rvBody">Your review</label><textarea id="rvBody" required rows="4" maxlength="600" placeholder="What did you think?"></textarea></div>
+          <button class="btn btn-primary" type="submit">Submit review</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- related -->
+    <section style="padding-bottom:80px" id="relatedSection">
+      <div class="section-head"><span class="eyebrow">Goes well with</span><h2>You might also like</h2></div>
+      <div class="grid grid-3" id="relatedGrid"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="siteFooter"></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/home.js"></script>
+  <script src="js/page.js"></script>
+  <script src="js/product.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
