@@ -33,7 +33,7 @@
         ? `<span class="badge badge-green">Paid${o.payment_method === "paystack" ? " · Paystack" : ""}</span>`
         : o.payment_status === "failed"
           ? `<span class="badge badge-red">Payment failed</span>`
-          : `<span class="badge badge-gold">Payment pending · ${o.payment_method === "cash" ? "cash on delivery" : "online"}</span>`;
+          : `<span class="badge badge-gold">Payment pending · ${o.payment_method === "cash" ? "pay ${FB.money(o.total)} on delivery" : "we will WhatsApp you a payment link"}</span>`;
       const items = (o.order_items || o.items || []).map((i) =>
         `<li>${FB.esc(i.product_name)} × ${i.quantity} — ${FB.money(i.line_total ?? i.unit_price * i.quantity)}</li>`).join("");
       result.innerHTML = `
