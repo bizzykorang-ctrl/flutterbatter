@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checkout — Flutter Batter</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+  <header class="site-header" id="siteHeader"></header>
+
+  <main class="wrap" style="padding:36px 0 90px">
+    <div class="page-hero" style="padding-top:0"><span class="eyebrow">Almost there</span><h1>Checkout</h1></div>
+
+    <div style="display:grid;gap:28px" id="checkoutRoot">
+      <div style="display:grid;gap:28px" class="co-grid">
+        <form class="card" id="coForm" style="padding:26px">
+          <h3 style="margin-bottom:16px">1 · Your details</h3>
+          <div class="form-grid two">
+            <div class="field"><label for="coName">Full name *</label><input id="coName" required maxlength="80"></div>
+            <div class="field"><label for="coPhone">Phone (WhatsApp) *</label><input id="coPhone" required type="tel" placeholder="0244 000 000" maxlength="15"></div>
+          </div>
+          <div class="field"><label for="coEmail">Email (for receipts &amp; tracking)</label><input id="coEmail" type="email" placeholder="you@example.com"></div>
+
+          <h3 style="margin:22px 0 16px">2 · Delivery</h3>
+          <div class="form-grid two">
+            <div class="field"><label for="coZone">Zone *</label><select id="coZone" required></select></div>
+            <div class="field"><label for="coStreet">Street / landmark *</label><input id="coStreet" required maxlength="140" placeholder="e.g. 12 Palm St, near Melcom"></div>
+          </div>
+          <div class="field"><label for="coNote">Note to the kitchen (optional — we hand-write gift notes)</label>
+            <textarea id="coNote" rows="2" maxlength="240" placeholder="e.g. Happy birthday Naa! From Kojo 💛"></textarea></div>
+
+          <h3 style="margin:22px 0 16px">3 · Payment</h3>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px" id="payMethods">
+            <button type="button" class="chip on" data-pay="paystack">💳 Pay online (MoMo / card)</button>
+            <button type="button" class="chip" data-pay="cash">💵 Cash on delivery</button>
+          </div>
+
+          <button class="btn btn-primary" id="coSubmit" type="submit" style="width:100%;font-size:1.05rem">Place order</button>
+          <p class="sub" style="font-size:.8rem;margin-top:12px;text-align:center">
+            By ordering you agree to our <a href="terms.html">terms</a>. Payments are processed securely by Paystack.
+          </p>
+        </form>
+
+        <aside class="card" style="padding:26px;align-self:start;position:sticky;top:84px">
+          <h3 style="margin-bottom:14px">Order summary</h3>
+          <div id="coLines"></div>
+          <hr class="divider">
+          <div class="field" style="margin-bottom:12px">
+            <label for="coCoupon">Coupon code</label>
+            <div style="display:flex;gap:8px">
+              <input id="coCoupon" style="text-transform:uppercase" placeholder="e.g. WELCOME10" maxlength="20">
+              <button type="button" class="btn btn-ink btn-sm" id="coCouponBtn">Apply</button>
+            </div>
+            <span id="coCouponMsg" style="font-size:.8rem;font-weight:700"></span>
+          </div>
+          <div class="co-total" id="coTotals"></div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer" id="siteFooter"></footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/home.js"></script>
+  <script src="js/page.js"></script>
+  <script src="js/checkout.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

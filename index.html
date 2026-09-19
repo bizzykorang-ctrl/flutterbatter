@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flutter Batter — Breakfast Boxes, Gift-Wrapped | Accra</title>
+  <meta name="description" content="Warm breakfast boxes and gift-wrapped brunch delivered across Accra. Pancake, Fusion and Classic boxes. Order by 10:30am for same-morning delivery.">
+  <meta property="og:title" content="Flutter Batter — Breakfast Boxes, Gift-Wrapped">
+  <meta property="og:description" content="Warm breakfast boxes, gift-wrapped and delivered across Accra.">
+  <meta property="og:type" content="website">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+  <header class="site-header" id="siteHeader"></header>
+
+  <!-- 1 · HERO (video) -->
+  <section class="hero" id="hero">
+    <div class="hero-media">
+      <video autoplay muted loop playsinline preload="metadata" poster="/assets/img/pancake.jpg" aria-hidden="true">
+        <source src="media/hero.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="wrap">
+      <div class="hero-content">
+        <span class="eyebrow">Accra · Mon–Sat mornings</span>
+        <h1 id="heroHeading" class="hero-words">Good mornings, boxed to be given.</h1>
+        <p class="sub" id="heroSub">Warm breakfast boxes, gift-wrapped and delivered across Accra.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="menu.html">Order a box</a>
+          <a class="btn btn-ghost" style="border-color:#FBF1DE;color:#FBF1DE" href="menu.html">See the menu</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- marquee -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </div>
+
+  <!-- 2 · FEATURED PRODUCTS -->
+  <section class="section" id="featured">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <span class="eyebrow">This week's favourites</span>
+        <h2>Featured boxes</h2>
+      </div>
+      <div class="grid grid-3 stagger" id="featuredGrid"></div>
+    </div>
+  </section>
+
+  <!-- 3 · BEST SELLERS -->
+  <section class="section" id="bestSellers" style="background:var(--paper-2);border-block:1px solid var(--cream-line)">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Loved every week</span>
+        <h2>Best sellers</h2>
+        <p class="sub">The boxes Accra keeps re-ordering — warm, generous, and always well wrapped.</p>
+      </div>
+      <div class="grid grid-3 stagger" id="bestSellerGrid"></div>
+    </div>
+  </section>
+
+  <!-- 4 · HOW IT WORKS -->
+  <section class="section" id="howItWorks">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <span class="eyebrow">From our kitchen to their hands</span>
+        <h2>How it works</h2>
+      </div>
+      <div class="grid grid-3 steps stagger" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+        <div class="card step"><h3>Choose a box</h3><p class="sub">Pick from the menu before 10:30am for a same-morning delivery.</p></div>
+        <div class="card step"><h3>We cook &amp; box it</h3><p class="sub">Everything is prepared fresh, packed warm, and sealed to travel well.</p></div>
+        <div class="card step"><h3>We gift-wrap</h3><p class="sub">Classic Boxes get the full wrap and ribbon — plus your hand-written note.</p></div>
+        <div class="card step"><h3>Delivered warm</h3><p class="sub">Track your order live and meet the rider at the door. Simple.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · TESTIMONIALS -->
+  <section class="section" id="testimonials" style="background:var(--paper-2);border-block:1px solid var(--cream-line)">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <span class="eyebrow">Word of mouth</span>
+        <h2>What customers say</h2>
+      </div>
+      <div class="grid grid-3 stagger" id="testimonialGrid"></div>
+    </div>
+  </section>
+
+  <!-- 6 · STATISTICS -->
+  <section class="section" id="stats">
+    <div class="wrap">
+      <div class="stats-band reveal" id="statsBand"></div>
+    </div>
+  </section>
+
+  <!-- 7 · DELIVERY COVERAGE MAP -->
+  <section class="section" id="coverage">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Greater Accra</span>
+        <h2>Delivery coverage</h2>
+        <p class="sub" id="coverageHours"></p>
+      </div>
+      <div class="card map-card reveal">
+        <svg class="coverage-svg" viewBox="0 0 420 320" role="img" aria-label="Stylised map of delivery zones across Accra">
+          <defs>
+            <linearGradient id="gZone" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#F3DDB2"/><stop offset="1" stop-color="#E9D9BC"/>
+            </linearGradient>
+          </defs>
+          <path d="M30 160 Q80 60 200 55 Q330 50 390 140 Q400 230 300 270 Q170 305 80 250 Q20 215 30 160 Z"
+                fill="url(#gZone)" stroke="#C9922E" stroke-width="2" opacity=".9"/>
+          <path d="M60 200 Q140 150 210 175 Q290 205 350 150" fill="none" stroke="#C9922E" stroke-width="1.4" stroke-dasharray="5 6" opacity=".6"/>
+          <text x="205" y="40" text-anchor="middle" style="font-size:13px;fill:#5A4636;font-weight:700">GREATER ACCRA</text>
+          <g id="mapZones"></g>
+        </svg>
+        <div>
+          <div class="zone-list" id="zoneList"></div>
+          <p class="sub" style="font-size:.85rem;margin-top:12px" id="coverageNote"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · FAQ -->
+  <section class="section" id="faq" style="background:var(--paper-2);border-block:1px solid var(--cream-line)">
+    <div class="wrap" style="max-width:820px">
+      <div class="section-head center reveal">
+        <span class="eyebrow">Good to know</span>
+        <h2>Frequently asked</h2>
+      </div>
+      <div id="faqList" class="reveal"></div>
+      <p class="sub" style="text-align:center;margin-top:20px">Still curious? <a href="faq.html">Read the full FAQ</a> or <a href="https://wa.me/233201234567" target="_blank" rel="noopener">WhatsApp us</a>.</p>
+    </div>
+  </section>
+
+  <!-- 9 · INSTAGRAM GALLERY -->
+  <section class="section" id="instagram">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <span class="eyebrow">@flutterbatter</span>
+        <h2>From the kitchen</h2>
+      </div>
+      <div class="insta-grid stagger" id="instaGrid"></div>
+      <p style="text-align:center;margin-top:18px" class="reveal"><a class="btn btn-ghost btn-sm" href="https://instagram.com/flutterbatter" target="_blank" rel="noopener">Follow on Instagram</a></p>
+    </div>
+  </section>
+
+  <!-- 10 · CTA -->
+  <section class="section" id="cta">
+    <div class="wrap">
+      <div class="cta-band reveal">
+        <span class="eyebrow" style="color:#FFF8EC">Make someone's morning</span>
+        <h2>Send a box they'll photograph before they eat.</h2>
+        <p>Order by 10:30am for same-morning delivery across Greater Accra — gift wrap and hand-written note included.</p>
+        <a class="btn btn-ink" href="menu.html">Order now — from GH₵250</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 · FOOTER -->
+  <footer class="site-footer" id="siteFooter"></footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/home.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flutter Batter — Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <!-- ===== LOGIN ===== -->
+  <div id="loginScreen">
+    <form class="login-card" id="loginForm">
+      <div class="login-brand"><span class="spark">✦</span> Flutter Batter <small>Admin</small></div>
+      <p class="sub" style="text-align:center">Staff access only. All actions are logged.</p>
+      <div class="field"><label for="lgEmail">Email</label><input id="lgEmail" type="email" required autocomplete="username"></div>
+      <div class="field"><label for="lgPass">Password</label><input id="lgPass" type="password" required autocomplete="current-password"></div>
+      <button class="btn btn-primary" style="width:100%" id="lgBtn" type="submit">Sign in</button>
+      <p id="lgMsg" style="color:var(--red);font-size:.86rem;text-align:center;min-height:1.2em;margin-top:10px"></p>
+      <p class="sub" style="font-size:.75rem;text-align:center" id="lgModeNote"></p>
+    </form>
+  </div>
+
+  <!-- ===== APP ===== -->
+  <div id="appShell" style="display:none">
+    <aside class="sidebar" id="sidebar">
+      <div class="side-brand"><span class="spark">✦</span> Flutter Batter</div>
+      <nav id="sideNav"></nav>
+      <div class="side-foot">
+        <div id="whoami" class="sub"></div>
+        <button class="btn btn-ghost btn-sm" id="logoutBtn">Sign out</button>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="main-head">
+        <button class="icon-btn" id="sideToggle" aria-label="Menu">☰</button>
+        <h1 id="pageTitle">Overview</h1>
+        <span id="demoPill" class="badge badge-gold" style="display:none">DEMO DATA</span>
+      </header>
+      <main id="mainBody"><!-- sections injected --></main>
+    </div>
+  </div>
+
+  <!-- modal -->
+  <div class="veil" id="veil"></div>
+  <div class="modal" id="modal" role="dialog" aria-modal="true"><div class="modal-body" id="modalBody"></div></div>
+  <div class="toast-zone" id="toastZone"></div>
+
+  <script src="js/admin-config.js"></script>
+  <script src="js/admin-data.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

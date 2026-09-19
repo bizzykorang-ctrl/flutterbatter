@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Delivery information — Flutter Batter</title>
+  <meta name="description" content="Flutter Batter delivery zones, fees and times across Greater Accra. Order by 10:30am for same-morning delivery.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+  <header class="site-header" id="siteHeader"></header>
+
+  <main class="wrap" style="padding-bottom:80px">
+    <section class="page-hero"><span class="eyebrow">Zones, fees &amp; times</span>
+      <h1>Delivery information</h1>
+      <p class="sub" id="dHours"></p>
+    </section>
+
+    <div class="grid grid-2" style="gap:26px;align-items:start">
+      <div class="card" style="padding:26px" id="zoneCard">
+        <h3 style="margin-bottom:10px">Zones &amp; fees</h3>
+        <div class="zone-list" id="zoneList"></div>
+      </div>
+      <div class="prose">
+        <h2>How it works</h2>
+        <ul>
+          <li><strong>Cut-off:</strong> order by <strong>10:30am</strong> for same-morning delivery. Later orders roll to the next morning.</li>
+          <li><strong>Timing:</strong> your zone's estimate window is shown at checkout. Riders text/WhatsApp when they're close.</li>
+          <li><strong>Fees:</strong> charged per order by zone (not per box) — sending three boxes to one address costs one fee.</li>
+          <li><strong>Tracking:</strong> every order gets a tracking number; follow it on the <a href="track.html">Track Order</a> page.</li>
+          <li><strong>Gifting:</strong> we can hand the box to the recipient directly — add their details and your note at checkout.</li>
+        </ul>
+        <h2>Areas we're working on</h2>
+        <p>Kasoa, Amasaman and Aburi are in testing with limited slots. <a href="https://wa.me/233201234567" target="_blank" rel="noopener">WhatsApp us</a> your area and we'll tell you honestly if we can reach you this week.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer" id="siteFooter"></footer>
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/home.js"></script>
+  <script src="js/page.js"></script>
+  <script>
+    window.FB_page.on(async () => {
+      const s = await window.FB.settings();
+      document.getElementById("dHours").textContent = "Delivery " + (s.delivery?.hours || "") + " · " + (s.delivery?.note || "");
+      document.getElementById("zoneList").innerHTML = (s.delivery?.zones || []).map((z) =>
+        `<div class="zone-row"><span>${window.FB.esc(z.name)} <span class="sub" style="font-size:.8rem">· ${window.FB.esc(z.eta)}</span></span>
+         <span class="zone-fee">${window.FB.money(z.fee)}</span></div>`).join("");
+    });
+  </script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fluttterbatter.netlify.app/sitemap.xml
