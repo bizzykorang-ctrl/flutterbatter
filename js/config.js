@@ -13,7 +13,7 @@ window.FB_CONFIG = {
   WHATSAPP: "233201234567",
   EMAIL: "hello@flutterbatter.com",
   INSTAGRAM: "https://instagram.com/flutterbatter",
-  PAYSTACK_PUBLIC_KEY: "pk_live_640c2c23c3255a2a26e8e58a7c0dc2af50cb181c",
+  PAYSTACK_PUBLIC_KEY: "pk_test_46e1dc9aa4fdb6f30d23dd18773ec154089e9d1a", // TEST MODE — swap to the client pk_live when their Paystack goes live,
   ONESIGNAL_APP_ID: "221203b8-d594-4f73-8763-25dcd7bde7ac",
 
   get LIVE() { return !!(this.SUPABASE_URL && this.SUPABASE_ANON_KEY); },
