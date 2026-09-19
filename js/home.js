@@ -35,6 +35,16 @@
       ]);
       const hp = settings.homepage || {};
 
+      /* honor admin section toggles: hide sections switched off */
+      const secMap = { hero: "hero", featured: "featured", best_sellers: "bestSellers",
+        how_it_works: "howItWorks", testimonials: "testimonials", stats: "stats",
+        coverage_map: "coverage", faq: "faq", instagram: "instagram", cta: "cta" };
+      const sections = hp.sections || {};
+      Object.keys(secMap).forEach(function (key) {
+        const el = document.getElementById(secMap[key]);
+        if (el && sections[key] === false) el.style.display = "none";
+      });
+
       /* hero words animation */
       const h = $("#heroHeading");
       if (h) {
