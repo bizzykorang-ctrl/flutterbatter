@@ -149,9 +149,73 @@
         LS.set("reviews", list);
         return { ok: true, demo: true };
       }
-      const items = payload.items.map((i) => ({ product_id: i.product_id, qty: i.qty }));
+      const user = await this.user();
+      const { error } = await supabase().from("reviews").insert({ ...review, user_id: user?.id ?? null, status: "pending" });
+      if (error) throw error;
+      return { ok: true };
+    },
+
+    async settings() {
+      if (!this.LIVE) {
+        const over = LS.get("settings", {});
+        const merged = JSON.parse(JSON.stringify(DEMO.settings));
+        for (const k of Object.keys(over)) merged[k] = { ...merged[k], ...over[k] };
+        return merged;
+      }
+      const { data, error } = await supabase().from("settings").select("key,value");
+      if (error) throw error;
+      const out = {};
+      for (const row of data || []) out[row.key] = row.value;
+      out.faq = out.faq || DEMO.settings.faq;
+      return out;
+    },
+
+    async checkCoupon(code, subtotal) {
+      code = (code || "").trim().toUpperCase();
+      if (!code) return { ok: false, reason: "Enter a code" };
+      let c;
+      if (!this.LIVE) c = DEMO.coupons.find((x) => x.code === code);
+      else {
+        const { data, error } = await supabase().from("coupons").select("*").eq("code", code).eq("is_active", true).maybeSingle();
+        if (error) throw error; c = data;
+      }
+      if (!c) return { ok: false, reason: "That code doesn't exist" };
+      if (c.expires_at && new Date(c.expires_at) < new Date()) return { ok: false, reason: "That code has expired" };
+      if (subtotal < (c.min_order || 0)) return { ok: false, reason: `Requires a ${money(c.min_order)} minimum` };
+      const discount = c.discount_type === "percent" ? Math.round(subtotal * c.discount_value) / 100 : Math.min(c.discount_value, subtotal);
+      return { ok: true, code: c.code, discount, label: c.discount_type === "percent" ? `${c.discount_value}% off` : `${money(c.discount_value)} off` };
+    },
+
+    /* ---------- orders ---------- */
+    async placeOrder(payload) {
+      // payload: {customer{...}, items[{product_id,name,price,qty}], zone, couponCode, paymentMethod, note}
+      const subtotal = payload.items.reduce((s, i) => s + i.price * i.qty, 0);
+      const coupon = payload.couponCode ? await this.checkCoupon(payload.couponCode, subtotal) : { ok: false };
+      const discount = coupon.ok ? coupon.discount : 0;
+      const total = subtotal + payload.zone.fee - discount;
+      if (!this.LIVE) {
+        const list = LS.get("orders", []);
+        const d = new Date();
+        const order = {
+          id: "demo-" + Date.now(),
+          order_number: "FB-" + d.toISOString().slice(0, 10).replace(/-/g, "") + "-" + String(list.length + 1).padStart(4, "0"),
+          customer_name: payload.customer.name, customer_phone: payload.customer.phone,
+          customer_email: payload.customer.email || null,
+          address_area: payload.zone.name, address_street: payload.customer.street,
+          address_notes: payload.customer.notes || null,
+          delivery_fee: payload.zone.fee, subtotal, discount, total,
+          coupon_code: coupon.ok ? coupon.code : null,
+          payment_method: payload.paymentMethod, payment_status: "pending", status: "received",
+          note: payload.note || null, created_at: new Date().toISOString(),
+          items: payload.items.map((i) => ({ product_name: i.name, unit_price: i.price, quantity: i.qty, line_total: i.price * i.qty })),
+        };
+        list.unshift(order);
+        LS.set("orders", list);
+        return { ok: true, demo: true, order };
+      }
       // server-side create_order RPC: re-prices from the products/zones/coupons
       // tables (client totals are display-only) and returns the tracked order
+      const items = payload.items.map((i) => ({ product_id: i.product_id, qty: i.qty }));
       const { data, error } = await supabase().rpc("create_order", {
         p_name: payload.customer.name, p_phone: payload.customer.phone,
         p_email: payload.customer.email || "",
