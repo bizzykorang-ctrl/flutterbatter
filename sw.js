@@ -1,7 +1,7 @@
 /* Flutter Batter service worker — offline shell + smart caching.
    v1: network-first for pages/API (freshness), cache-first for
    immutable assets (images, css, js with version query). */
-const VERSION = "fb-v3";
+const VERSION = "fb-v4";
 const SHELL = ["./", "menu.html", "css/site.css", "js/config.js", "js/data.js", "js/app.js", "manifest.json", "icons/icon-192.png"];
 
 self.addEventListener("install", (e) => {
@@ -18,6 +18,8 @@ self.addEventListener("activate", (e) => {
 self.addEventListener("fetch", (e) => {
   const url = new URL(e.request.url);
   if (e.request.method !== "GET" || url.origin !== location.origin) return;
+  // video/audio stream with Range headers: never serve from cache — pass through
+  if (e.request.headers.has("range")) return;
 
   // immutable assets: cache-first
   if (/\/assets\/|\/icons\/|\.woff2?$|\.(jpe?g|png|webp|mp4)$/i.test(url.pathname)) {
