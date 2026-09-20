@@ -1,7 +1,7 @@
 /* Flutter Batter service worker — offline shell + smart caching.
    v1: network-first for pages/API (freshness), cache-first for
    immutable assets (images, css, js with version query). */
-const VERSION = "fb-v4";
+const VERSION = "fb-v5";
 const SHELL = ["./", "menu.html", "css/site.css", "js/config.js", "js/data.js", "js/app.js", "manifest.json", "icons/icon-192.png"];
 
 self.addEventListener("install", (e) => {
@@ -26,8 +26,11 @@ self.addEventListener("fetch", (e) => {
     e.respondWith(
       caches.match(e.request).then((hit) => hit ||
         fetch(e.request).then((res) => {
-          const copy = res.clone();
-          caches.open(VERSION).then((c) => c.put(e.request, copy));
+          const ct = res.headers.get("content-type") || "";
+          if (res.ok && !ct.includes("text/html")) {
+            const copy = res.clone();
+            caches.open(VERSION).then((c) => c.put(e.request, copy));
+          }
           return res;
         }))
     );
