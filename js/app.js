@@ -169,7 +169,7 @@
 
     // PWA service worker (https only)
     if ("serviceWorker" in navigator && location.protocol === "https:") {
-      navigator.serviceWorker.register("sw.js?v=3").catch(() => {});
+      navigator.serviceWorker.register("sw.js?v=5").catch(() => {});
     }
 
     // OneSignal (https only, live mode only)

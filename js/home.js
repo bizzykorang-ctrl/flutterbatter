@@ -29,9 +29,10 @@
   }
 
   document.addEventListener("DOMContentLoaded", async () => {
+    function once(fn) { return fn().catch(function (e) { return new Promise(function (res) { setTimeout(function () { res(fn()); }, 1500); }); }); }
     try {
       const [settings, featured, best, reviews] = await Promise.all([
-        FB.settings(), FB.products({ featured: true }), FB.products({ bestSeller: true }), FB.featuredReviews(),
+        once(function () { return FB.settings(); }), once(function () { return FB.products({ featured: true }); }), once(function () { return FB.products({ bestSeller: true }); }), once(function () { return FB.featuredReviews(); }),
       ]);
       const hp = settings.homepage || {};
 
