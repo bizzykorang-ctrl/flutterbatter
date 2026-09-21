@@ -134,6 +134,7 @@
             finish(order, null);
             return;
           }
+          window.FB_Cart.clear(); // basket empties the moment Paystack checkout opens
           location.href = init.authorization_url; // callback returns to /track.html?ref=…
         }
       } catch (err) {
