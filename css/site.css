@@ -371,3 +371,19 @@ h3 { font-size: 1.25rem; }
 }
 .wa-float:hover { transform: scale(1.08); text-decoration: none; }
 .wa-float svg { width: 27px; height: 27px; fill: #fff; }
+
+/* ---------- scroll motion pass (motion.js) ---------- */
+#fbProgress {
+  position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 90;
+  background: linear-gradient(90deg, var(--gold), var(--butter));
+  transform-origin: 0 50%; transform: scaleX(0);
+  pointer-events: none;
+}
+.fb-zoom-in { animation: fbZoomSettle .9s cubic-bezier(.22,.61,.36,1) both; }
+@keyframes fbZoomSettle {
+  from { transform: scale(1.08); opacity: .35; }
+  to { transform: scale(1); opacity: 1; }
+}
+.hero-media { will-change: transform; }
+.hero-content { will-change: transform; }
+.product-media img { will-change: transform; }

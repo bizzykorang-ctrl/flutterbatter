@@ -275,7 +275,9 @@
     async signIn(email, password) {
       if (!this.LIVE) { LS.set("demo_user", { email }); return { ok: true, demo: true }; }
       const { error } = await supabase().auth.signInWithPassword({ email, password });
-      if (error) throw error; return { ok: true };
+      if (error) throw error;
+      await supabase().rpc("claim_orders_by_email").catch(function () {});
+      return { ok: true };
     },
     async signOut() {
       if (!this.LIVE) { localStorage.removeItem("fb_demo_user"); return; }
@@ -289,9 +291,8 @@
     /* ---------- my orders / addresses (live mode; demo falls back locally) ---------- */
     async myOrders() {
       if (!this.LIVE) return LS.get("orders", []).filter((o) => o.customer_email === LS.get("demo_user", {})?.email);
-      // live: order history binding (by email) ships with the next hardening pass —
-      // tracking by order number works today
-      return [];
+      const { data, error } = await supabase().from("orders").select("*, order_items(*)").order("created_at", { ascending: false });
+      if (error) throw error; return data;
     },
     async addresses() {
       if (!this.LIVE) return LS.get("addresses", []);
