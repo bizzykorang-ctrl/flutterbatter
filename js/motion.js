@@ -42,18 +42,26 @@
         if (el && !el.classList.contains("stagger")) el.classList.add("stagger");
       });
 
-    /* 4 · zoom-settle on product media when scrolled into view */
-    var zoomables = document.querySelectorAll(".product-media img, .pdp-media img, .insta-cell img");
+    /* 4 · zoom-settle on product media when scrolled into view
+       (cards are injected after data loads, so rescan lazily) */
+    var zio = null;
     if ("IntersectionObserver" in window) {
-      var zio = new IntersectionObserver(function (entries) {
+      zio = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
           if (!e.isIntersecting) return;
           e.target.classList.add("fb-zoom-in");
           zio.unobserve(e.target);
         });
       }, { threshold: 0.18 });
-      zoomables.forEach(function (i) { zio.observe(i); });
     }
+    function armZoomables() {
+      if (!zio) return;
+      document.querySelectorAll(".product-media img, .pdp-media img, .insta-cell img")
+        .forEach(function (i) { if (!i.dataset.fbZoom) { i.dataset.fbZoom = "1"; zio.observe(i); } });
+    }
+    armZoomables();
+    [800, 1800, 3200].forEach(function (ms) { setTimeout(armZoomables, ms); });
+    window.FB_ARM_ZOOM = armZoomables;
 
     /* 5 · section headings slide in */
     document.querySelectorAll(".section-head").forEach(function (h) {
@@ -72,6 +80,7 @@
               if (r.top < innerHeight) c.style.transitionDelay = "0ms";
             });
           });
+          if (window.FB_ARM_ZOOM) window.FB_ARM_ZOOM();
         }, 300);
       };
     }
